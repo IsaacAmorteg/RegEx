@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using NUnit.Framework;
+using System;
 using System.IO;
 using System.Linq;
 using System.Xml;
@@ -50,11 +51,31 @@ namespace RegularExpression.Test
         [Test]
         public void Test3()
         {
-            var expected = _testInstanceToSerialize.GetType().GetFields().Select(i => i.GetValue(_testInstanceToSerialize));
+            var serializedJson = JsonConvert.SerializeObject(_testInstanceToSerialize);
+            Console.WriteLine("Serialized JSON:");
+            Console.WriteLine(serializedJson);
 
-            var result = RegularExpressionStore.Method3(JsonConvert.SerializeObject(_testInstanceToSerialize));
+            var expected = _testInstanceToSerialize.GetType().GetFields()
+                .Select(i => i.GetValue(_testInstanceToSerialize)?.ToString()?.ToLower() ?? "null")
+                .ToList();
 
-            Assert.AreEqual(expected.Select(i => i == null ? "null" : i.ToString()).Select(i => i.ToLower()), result);
+            var result = RegularExpressionStore.Method3(serializedJson)
+                .Select(i => i?.ToLower() ?? "null")
+                .ToList();
+
+            Console.WriteLine("Expected values:");
+            foreach (var value in expected)
+            {
+                Console.WriteLine(value);
+            }
+
+            Console.WriteLine("Actual values:");
+            foreach (var value in result)
+            {
+                Console.WriteLine(value);
+            }
+
+            Assert.AreEqual(expected, result);
         }
 
         [Test]

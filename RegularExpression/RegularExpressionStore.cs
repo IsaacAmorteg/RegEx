@@ -1,27 +1,61 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 
 namespace RegularExpression
 {
     public static class RegularExpressionStore
-    {
+    {        
         // should return a bool indicating whether the input string is
         // a valid team international email address: firstName.lastName@domain (serhii.mykhailov@teaminternational.com etc.)
         // address cannot contain numbers
         // address cannot contain spaces inside, but can contain spaces at the beginning and end of the string
         public static bool Method1(string input)
         {
+            Regex _regex = new Regex(@"^\s*[a-zA-Z]+\.[a-zA-Z]+@teaminternational\.com\s*$");
+            Match match = _regex.Match(input);
+            return match.Success;
             throw new NotImplementedException();
         }
 
         // the method should return a collection of field names from the json input
         public static IEnumerable<string> Method2(string inputJson)
         {
+            List<string> fieldNames = new List<string>();
+            Regex regex = new Regex("\"(.*?)\":\\s*(?:null|\".*?\"|\\d+|true|false)");
+            MatchCollection matches = regex.Matches(inputJson);
+
+            foreach (Match match in matches)
+            {
+                fieldNames.Add(match.Groups[1].Value);
+            }
+
+            return fieldNames;
+
             throw new NotImplementedException();
         }
 
         // the method should return a collection of field values from the json input
         public static IEnumerable<string> Method3(string inputJson)
         {
+            List<string> fieldValues = new List<string>();
+            Regex regex = new Regex("\"(.*?)\":\\s*(null|\"(.*?)\"|\\d+|true|false)");
+            MatchCollection matches = regex.Matches(inputJson);
+
+            foreach (Match match in matches)
+            {
+                string value = match.Groups[2].Value;
+
+                // Remove double quotation marks if present
+                if (value.StartsWith("\"") && value.EndsWith("\""))
+                {
+                    value = value.Trim('"');
+                }
+
+                fieldValues.Add(value);
+            }
+
+            return fieldValues;
+
             throw new NotImplementedException();
         }
 

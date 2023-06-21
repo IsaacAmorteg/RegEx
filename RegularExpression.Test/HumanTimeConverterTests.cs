@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using RegularExpression.Task;
 using System;
-using System.Collections.Generic;s
+using System.Collections.Generic;
 
 namespace RegularExpression.Test
 {
