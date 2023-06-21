@@ -62,8 +62,22 @@ namespace RegularExpression
         // the method should return a collection of field names from the xml input
         public static IEnumerable<string> Method4(string inputXml)
         {
+            List<string> fieldNames = new List<string>();
+            Regex regex = new Regex(@"<(?!\/)(?!T)([^<>?\s]+)\s*?");
+            MatchCollection matches = regex.Matches(inputXml);
+
+            foreach (Match match in matches)
+            {            
+               fieldNames.Add(match.Groups[1].Value);                
+            }
+
+            return fieldNames;
+
             throw new NotImplementedException();
         }
+
+
+
 
         // the method should return a collection of field values from the input xml
         // omit null values

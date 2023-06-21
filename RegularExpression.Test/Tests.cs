@@ -51,36 +51,16 @@ namespace RegularExpression.Test
         [Test]
         public void Test3()
         {
-            var serializedJson = JsonConvert.SerializeObject(_testInstanceToSerialize);
-            Console.WriteLine("Serialized JSON:");
-            Console.WriteLine(serializedJson);
+            var expected = _testInstanceToSerialize.GetType().GetFields().Select(i => i.GetValue(_testInstanceToSerialize));
 
-            var expected = _testInstanceToSerialize.GetType().GetFields()
-                .Select(i => i.GetValue(_testInstanceToSerialize)?.ToString()?.ToLower() ?? "null")
-                .ToList();
+            var result = RegularExpressionStore.Method3(JsonConvert.SerializeObject(_testInstanceToSerialize));
 
-            var result = RegularExpressionStore.Method3(serializedJson)
-                .Select(i => i?.ToLower() ?? "null")
-                .ToList();
-
-            Console.WriteLine("Expected values:");
-            foreach (var value in expected)
-            {
-                Console.WriteLine(value);
-            }
-
-            Console.WriteLine("Actual values:");
-            foreach (var value in result)
-            {
-                Console.WriteLine(value);
-            }
-
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected.Select(i => i == null ? "null" : i.ToString()).Select(i => i.ToLower()), result);
         }
 
         [Test]
         public void Test4()
-        {
+        {                   
             var expected = _testInstanceToSerialize.GetType().GetFields().Select(i => i.Name);
 
             var serializer = new XmlSerializer(typeof(TestClass));
@@ -95,7 +75,22 @@ namespace RegularExpression.Test
                 }
             }
 
+            Console.WriteLine("Serialized XML:");
+            Console.WriteLine(serialized);
+
             var result = RegularExpressionStore.Method4(serialized);
+
+            Console.WriteLine("Expected values:");
+            foreach (var value in expected)
+            {
+                Console.WriteLine(value);
+            }
+
+            Console.WriteLine("Actual values:");
+            foreach (var value in result)
+            {
+                Console.WriteLine(value);
+            }
 
             Assert.AreEqual(expected, result);
         }
