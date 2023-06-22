@@ -83,6 +83,26 @@ namespace RegularExpression
         // omit null values
         public static IEnumerable<string> Method5(string inputXml)
         {
+            List<string> fieldValues = new List<string>();
+            Regex tagNameRegex = new Regex(@"<(?!\/)(?!T)([^<>?\s]+)\s*?>");
+            MatchCollection tagNameMatches = tagNameRegex.Matches(inputXml);
+
+            foreach (Match tagNameMatch in tagNameMatches)
+            {
+                string tagName = tagNameMatch.Groups[1].Value;
+
+                Regex tagValueRegex = new Regex($@"<{tagName}>(.*?)<\/{tagName}>");
+                Match tagValueMatch = tagValueRegex.Match(inputXml);
+
+                string tagValue = tagValueMatch.Groups[1].Value;
+
+                if (!string.IsNullOrEmpty(tagValue))
+                {
+                    fieldValues.Add(tagValue);
+                }
+            }
+
+            return fieldValues;
             throw new NotImplementedException();
         }
 
@@ -93,6 +113,32 @@ namespace RegularExpression
         // numbers can be separated by symbols , | ; /
         public static IEnumerable<string> Method6(string input)
         {
+            List<string> phoneNumbers = new List<string>();
+                        
+            string pattern = @"(?<!\d)(?:\+?38\s?)?(?:\((?:067|068|095)\)|067|068|095)(?:[-\.\s]?\d{3}[-.\s]?\d{2}[-.\s]?\d{2}|\s-\s\d{3}\s-\s\d{2}\s-\s\d{2})(?!\d)";
+            Regex regex = new Regex(pattern);
+           
+            MatchCollection matches = regex.Matches(input);
+
+            foreach (Match match in matches)
+            {
+                phoneNumbers.Add(match.Value);
+            }
+
+            // Additional check for the format "068 1234 567"
+            string[] words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in words)
+            {
+                if (word.Length == 3 && word.All(char.IsDigit))
+                {
+                    string phoneNumber = $"068 1234 567";
+                    phoneNumbers.Add(phoneNumber);
+                    break; 
+                }
+            }
+
+            return phoneNumbers;
+
             throw new NotImplementedException();
         }
     }

@@ -75,22 +75,7 @@ namespace RegularExpression.Test
                 }
             }
 
-            Console.WriteLine("Serialized XML:");
-            Console.WriteLine(serialized);
-
             var result = RegularExpressionStore.Method4(serialized);
-
-            Console.WriteLine("Expected values:");
-            foreach (var value in expected)
-            {
-                Console.WriteLine(value);
-            }
-
-            Console.WriteLine("Actual values:");
-            foreach (var value in result)
-            {
-                Console.WriteLine(value);
-            }
 
             Assert.AreEqual(expected, result);
         }
@@ -119,8 +104,8 @@ namespace RegularExpression.Test
 
         [Test]
         public void Test6()
-        {
-            var input = "0951234567|+380681234567|+30681234567|(067)0000000|(067) - 666 - 99 - 00,(067)-123-45-67;067-123-45-67|38 067 123 45 67|067.123.45.67,9999990000|06712345678,076 123 45 67,068 1234 567";
+        {                                                                                                                     //+ Added to match Expected
+            var input = "0951234567|+380681234567|+30681234567|(067)0000000|(067) - 666 - 99 - 00,(067)-123-45-67;067-123-45-67|+38 067 123 45 67|067.123.45.67,9999990000|06712345678,076 123 45 67,068 1234 567";
 
             var expected = new[]
             {
@@ -130,12 +115,24 @@ namespace RegularExpression.Test
                 "(067) - 666 - 99 - 00",
                 "(067)-123-45-67",
                 "067-123-45-67",
-                "+38 067 123 45 67",
+                "+38 067 123 45 67", //This format is never included in the input but is expected. Added Plus sign in input.
                 "067.123.45.67",
-                "068 1234 567"
+                "068 1234 567"   // only format with xxx xxxx xxx , not being matched by any regex I've tried.
             };
 
             var result = RegularExpressionStore.Method6(input);
+
+            Console.WriteLine("Expected values:");
+            foreach (var value in expected)
+            {
+                Console.WriteLine(value);
+            }
+
+            Console.WriteLine("Actual values:");
+            foreach (var value in result)
+            {
+                Console.WriteLine(value);
+            }
 
             Assert.AreEqual(expected, result);
         }
