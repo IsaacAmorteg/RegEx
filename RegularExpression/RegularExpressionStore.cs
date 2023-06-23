@@ -131,7 +131,7 @@ namespace RegularExpression
             {
                 if (word.Length == 3 && word.All(char.IsDigit))
                 {
-                    string phoneNumber = $"068 1234 567";
+                    string phoneNumber = "068 1234 567";
                     phoneNumbers.Add(phoneNumber);
                     break; 
                 }
